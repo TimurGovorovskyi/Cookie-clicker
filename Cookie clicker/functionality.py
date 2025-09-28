@@ -1,5 +1,6 @@
 from pygame import *
 from time import sleep
+import value
 
 
 class Cookie():
@@ -15,6 +16,8 @@ class Cookie():
     def is_pressed(self, pos):
         mx, my = pos
         if (mx - self.x) ** 2 + (my - self.y) ** 2 <= self.radius ** 2:
-            print("Cookie clicked!")
+            value.add_value(1)
+            print(value.score)
+
             
     

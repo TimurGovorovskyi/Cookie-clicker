@@ -1,6 +1,7 @@
 from pygame import *
 from settings import window_size, background_color
 from functionality import Cookie
+import value
 
 window = display.set_mode(window_size)
 display.set_caption("Cookie Clicker")
