@@ -1,23 +1,35 @@
-from pygame import *
-from settings import window_size, background_color
-from functionality import Cookie
-import value
+import pygame
+from game_classes import Game, text_font, title
 
-window = display.set_mode(window_size)
-display.set_caption("Cookie Clicker")
-window.fill(background_color)
+pygame.init()
 
-cookie = Cookie(400, 300, 100, (255, 223, 0))
+width = 800
+height = 600
 
-running = True
-while running:
-    for e in event.get():
-        if e.type == QUIT:
-            running = False
-        elif e.type == MOUSEBUTTONDOWN and e.button == 1:
-            if cookie.is_pressed(e.pos):
-                pass
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Cookie clicker")
+cookie_image = pygame.image.load("Cookie clicker/assets/images/Cookie.png").convert_alpha()
+clock = pygame.time.Clock()
 
-    window.fill(background_color)
-    cookie.draw(window)
-    display.update()
+game = Game()
+
+while True:
+    screen.fill(("#f5c5ff"))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        
+    screen.blit(title, (width // 2 - title.get_width() // 2, 50))
+
+    if game.victory():
+        screen.fill(("#49ff95"))  # Fill with black or any color
+        victory_text = text_font.render("You Win! You can close the game now :)", True, (255, 255, 255))
+        screen.blit(victory_text, (screen.get_width() // 2 - victory_text.get_width() // 2,
+                                   screen.get_height() // 2 - victory_text.get_height() // 2))
+    else:
+        game.render(screen)
+        screen.blit(cookie_image, (250, 200))
+
+    pygame.display.flip()
+    clock.tick(60)
