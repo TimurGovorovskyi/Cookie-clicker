@@ -9,12 +9,13 @@ title = text_font.render("Cookie clicker", True, ("#000000"))
 ingame_title = text_font.render("Click the cookie! :D", True, ("#000000"))
 settings_volume_text = text_font.render("Volume:", True, ("#000000"))
 
-victory1 = pygame.mixer.Sound("Cookie clicker/assets/sounds/Victory1.mp3")
-victory2 = pygame.mixer.Sound("Cookie clicker/assets/sounds/Victory2.mp3")
-background_music1 = pygame.mixer.Sound("Cookie clicker/assets/sounds/background_music1.mp3")
-background_music2 = pygame.mixer.Sound("Cookie clicker/assets/sounds/background_music2.mp3")
-lobby_music = pygame.mixer.Sound("Cookie clicker/assets/sounds/lobby_music.mp3")
-click_sound = pygame.mixer.Sound("Cookie clicker/assets/sounds/click.mp3")
+
+victory1 = pygame.mixer.Sound("assets/sounds/Victory1.mp3")
+victory2 = pygame.mixer.Sound("assets/sounds/Victory2.mp3")
+background_music1 = pygame.mixer.Sound("assets/sounds/background_music1.mp3")
+background_music2 = pygame.mixer.Sound("assets/sounds/background_music2.mp3")
+lobby_music = pygame.mixer.Sound("assets/sounds/lobby_music.mp3")
+click_sound = pygame.mixer.Sound("assets/sounds/click.mp3")
 
 
 
@@ -35,6 +36,7 @@ class Game:
         self.cookie.center = self.cookie_center
         self.clicked = False
         self.color = (255, 223, 0)
+        self.cookie_angle = 0
 
         self.upgradeBtn = pygame.Rect(300, 60, 185, 75)
         self.upgrade1_cost = 10
@@ -82,7 +84,6 @@ class Game:
                     self.upgrade1_cost *= 2
                     self.cookies_per_click += 2
         
-        #pygame.draw.rect(surface, self.color, self.cookie, border_radius=150)
 
 
     def music_player(self, song_number):
@@ -131,15 +132,22 @@ class Game:
         if self.cookie_scale < 1.0 and self.target_cookie_scale == 0.8:
             self.target_cookie_scale = 1.0
 
+    def cookie_spinning(self):
+        self.cookie_angle = (self.cookie_angle + 0.5) % 360  # Slow spin
+
     def render(self, surface, cookie_image="Cookie clicker/assets/images/Cookie.png"):
         self.update_cookie_anim()
+        self.cookie_spinning()
         scaled_size = int(self.cookie_base_size * self.cookie_scale)
         self.cookie.width = scaled_size
         self.cookie.height = scaled_size
         self.cookie.center = self.cookie_center
         if cookie_image is not None:
+            # First scale, then rotate for correct click animation
             scaled_img = pygame.transform.smoothscale(cookie_image, (scaled_size, scaled_size))
-            surface.blit(scaled_img, self.cookie.topleft)
+            rotated_img = pygame.transform.rotate(scaled_img, self.cookie_angle)
+            rotated_rect = rotated_img.get_rect(center=self.cookie.center)
+            surface.blit(rotated_img, rotated_rect.topleft)
         self.clicked_button(surface)
         self.draw_score(surface)
         self.upgrade(surface)
