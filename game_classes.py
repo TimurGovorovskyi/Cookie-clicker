@@ -6,7 +6,7 @@ volume = 1
 
 text_font = pygame.font.Font(None, 48)
 title = text_font.render("Cookie clicker", True, ("#000000"))
-ingame_title = text_font.render("Click the cookie! :D", True, ("#000000"))
+ingame_title = text_font.render("Click the cookie! :D", True, ("#FFFFFF"))
 settings_volume_text = text_font.render("Volume:", True, ("#000000"))
 
 
@@ -38,7 +38,7 @@ class Game:
         self.color = (255, 223, 0)
         self.cookie_angle = 0
 
-        self.upgradeBtn = pygame.Rect(300, 60, 185, 75)
+        self.upgradeBtn = pygame.Rect(275, 60, 250, 75)
         self.upgrade1_cost = 10
 
         self.game_font = pygame.font.Font(None, 20)
@@ -51,16 +51,16 @@ class Game:
         self.upgrade1_description = self.game_font.render(f"+{self.cookies_per_click} cookies per click", True, "#ffffff")
         self.display_cost = text_font.render(f"Cost: {self.upgrade1_cost}", True, ("#ffffff"))
 
-        pygame.draw.rect(surface, "#883EFF", self.upgradeBtn, border_radius=15)
-        surface.blit(self.display_cost, (35 + 285, 80))
-        surface.blit(self.upgrade1_description, (30 + 285, 60))
+        pygame.draw.rect(surface, "#00AEFF", self.upgradeBtn, border_radius=15)
+        surface.blit(self.display_cost, (0 + 285, 80))
+        surface.blit(self.upgrade1_description, (50 + 285, 60))
 
     def draw_score(self, surface):
-        self.display_cookies = text_font.render(f"Cookies: {str(self.cookies)}", True, ("#ffffff"))
+        self.display_cookies = text_font.render(f"Cookies: {str(self.cookies)}", True, ("#00AEFF"))
         surface.blit(self.display_cookies, (25, 550))
 
-    def victory(self):
-        if self.cookies >= 1000000:
+    def victory(self, victory_score):
+        if self.cookies >= victory_score:
             return True
         return False
             
@@ -82,7 +82,7 @@ class Game:
                 if self.cookies >= self.upgrade1_cost:
                     self.cookies -= self.upgrade1_cost
                     self.upgrade1_cost *= 2
-                    self.cookies_per_click += 2
+                    self.cookies_per_click *= 2
         
 
 
